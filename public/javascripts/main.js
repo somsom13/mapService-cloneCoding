@@ -20,7 +20,7 @@ $.ajax({
         return;
     }
 
-    console.log(`main.js에서 ajax로 get한 데이터 - message: ${response.message}, data: ${response.data}`);
+    console.log(`main.js에서 ajax로 get한 데이터 - message: ${response.message}, data: ${JSON.stringify(response.data)}`);
     /*  response.data에 내용이 제대로 전달되지 않음
         index.js에서 db로 부터 값 찾는건 ok, 근데 res.json 으로 response 보낸 다음에 response.data가 제대로 전달 안된것같음  */
 
@@ -33,13 +33,14 @@ $.ajax({
     let infoWindowList=[];
 
     const onClickHandler=(i)=>()=>{//함수에서 함수를 return
-        console.log('click marker number :',i);
+        //console.log('click marker number :',i);
         const marker=markerList[i];//마커리스트에서 클릭된 마커 정보 가져오고
         const infowin=infoWindowList[i];
         if(infowin.getMap()){//이미 infowindow가 열려있으면 닫고
-            infowin.close();
+            infowin.close();//이게 return 되거나
         }else{
             infowin.open(map,marker);//infowindow가 안열려있으면 열고
+            //이게 return 된다! 
         }
     };
 
@@ -59,7 +60,8 @@ $.ajax({
 
     for (let i in data){
         const target=data[i];
-        const latlng=new naver.maps.LatLng(target.lat,target.long);
+        const latlng=new naver.maps.LatLng(target.lat,target.lng);
+        console.log(`lat lng: ${latlng}`);
 
 
         let marker=new naver.maps.Marker({
